@@ -1,50 +1,50 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: New constitution → v1.0.0
+- Added sections: All core principles established
+- Removed sections: None (new constitution)
+- Templates requiring updates: ✅ plan-template.md updated (Constitution Check section)
+- Follow-up TODOs: None
+-->
+
+# AI-MI Dynamic Web App Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Component-First Architecture
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every feature MUST be built as reusable components with clear interfaces. Components MUST be self-contained, independently testable, and documented with clear responsibilities. No monolithic code blocks or tightly coupled implementations allowed.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Test-Driven Development (NON-NEGOTIABLE)
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Tests MUST be written before implementation. Red-Green-Refactor cycle strictly enforced: Tests written → Tests fail → Implementation → Tests pass → Refactor. Every user story requires acceptance tests that validate the complete user journey.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Progressive Enhancement
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Web app MUST work with basic HTML/CSS foundation, then enhance with JavaScript. Core functionality MUST remain accessible without JavaScript. Progressive layers: semantic HTML → responsive CSS → interactive JavaScript → advanced features.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Web Application Standards
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+All dynamic web applications MUST adhere to:
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- **Responsive Design**: Mobile-first approach, functional on all viewport sizes
+- **Performance**: Page load time under 3 seconds on 3G networks
+- **Accessibility**: WCAG 2.1 AA compliance for all user-facing features
+- **Security**: Input validation, HTTPS enforcement, secure headers implementation
+- **Browser Support**: Modern browsers (Chrome/Firefox/Safari/Edge latest 2 versions)
+
+## Development Workflow
+
+All feature development MUST follow this workflow:
+
+1. **Specification**: User stories with acceptance criteria defined
+2. **Design**: Component architecture and API contracts documented
+3. **Implementation**: TDD with component tests, integration tests, e2e tests
+4. **Review**: Code review focusing on constitution compliance
+5. **Validation**: Automated testing pipeline and manual QA verification
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. All pull requests MUST verify compliance with these principles. Any complexity that violates these principles MUST be explicitly justified with documented rationale. Constitution amendments require team consensus and version increment.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-11-02 | **Last Amended**: 2025-11-02

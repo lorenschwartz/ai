@@ -1,0 +1,528 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AI Waiter System API",
+    "description": "REST API for conversational restaurant ordering system",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.ai-waiter.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:3000/v1",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/sessions": {
+      "post": {
+        "summary": "Create new customer session",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Session created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionId}/conversation": {
+      "post": {
+        "summary": "Send message in conversation",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "AI response generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menu/{restaurantId}": {
+      "get": {
+        "summary": "Get restaurant menu",
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menu items retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "summary": "Create new order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "summary": "Get order details",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "summary": "Process payment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Payment processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateSessionRequest": {
+        "type": "object",
+        "properties": {
+          "restaurantId": {
+            "type": "string"
+          },
+          "tableNumber": {
+            "type": "string"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/CustomerPreferences"
+          }
+        },
+        "required": ["restaurantId"]
+      },
+      "SessionResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "conversationId": {
+            "type": "string"
+          },
+          "welcomeMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "ConversationMessage": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["text", "voice"]
+          }
+        },
+        "required": ["content"]
+      },
+      "ConversationResponse": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "aiResponse": {
+            "type": "string"
+          },
+          "suggestions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItem"
+            }
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "currentTopic": {
+                "type": "string"
+              },
+              "intent": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "MenuResponse": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuCategory"
+            }
+          }
+        }
+      },
+      "MenuCategory": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItem"
+            }
+          }
+        }
+      },
+      "MenuItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "description": "Price in cents"
+          },
+          "category": {
+            "type": "string"
+          },
+          "dietaryTags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allergens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "preparationTime": {
+            "type": "integer",
+            "description": "Time in minutes"
+          }
+        }
+      },
+      "CustomerPreferences": {
+        "type": "object",
+        "properties": {
+          "dietary": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "spiceLevel": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "restaurantId": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "specialInstructions": {
+            "type": "string"
+          }
+        },
+        "required": ["customerId", "restaurantId", "items"]
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "menuItemId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "modifications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["menuItemId", "quantity"]
+      },
+      "OrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "submitted", "acknowledged", "preparing", "ready", "served", "cancelled"]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "totalAmount": {
+            "type": "integer",
+            "description": "Total in cents"
+          },
+          "estimatedReadyTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "specialInstructions": {
+            "type": "string"
+          }
+        }
+      },
+      "PaymentRequest": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": ["credit_card", "debit_card", "apple_pay", "google_pay", "cash"]
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Amount in cents"
+          },
+          "tipAmount": {
+            "type": "integer",
+            "description": "Tip in cents"
+          },
+          "splits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentSplit"
+            }
+          }
+        },
+        "required": ["orderId", "method", "amount"]
+      },
+      "PaymentSplit": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "method": {
+            "type": "string"
+          }
+        }
+      },
+      "PaymentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "processing", "completed", "failed", "refunded"]
+          },
+          "receiptUrl": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

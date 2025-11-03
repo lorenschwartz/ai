@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**Component Architecture**: Features MUST be designed as reusable, independently testable components with clear interfaces. No monolithic implementations allowed.
+
+**Test Coverage**: Every user story MUST have acceptance tests defined. TDD workflow MUST be followed (tests written first, fail, then implement).
+
+**Progressive Enhancement**: Core functionality MUST work without JavaScript. Enhancement layers MUST be clearly defined.
+
+**Web Standards**: MUST meet responsive design (mobile-first), performance (<3s load), accessibility (WCAG 2.1 AA), and security requirements.
 
 ## Project Structure
 
