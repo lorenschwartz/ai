@@ -14,7 +14,7 @@ const pgConfig: PoolConfig = {
   password: process.env.DATABASE_PASSWORD || 'password',
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 500, // Short timeout for quick dev failure
 };
 
 // Create PostgreSQL connection pool
@@ -26,6 +26,9 @@ const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 // Create Redis client
 export const redis: RedisClientType = createClient({
   url: redisUrl,
+  socket: {
+    connectTimeout: 500, // Short timeout for quick dev failure
+  },
 });
 
 // Database connection functions
