@@ -23,7 +23,7 @@ Object.defineProperty(window, 'SpeechRecognition', {
 });
 
 Object.defineProperty(window, 'webkitSpeechRecognition', {
-  value: window.SpeechRecognition,
+  value: window.SpeechRecognitionEvent
 });
 
 // Mock ResizeObserver
