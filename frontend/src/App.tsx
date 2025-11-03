@@ -35,9 +35,9 @@ const SystemStatus: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">Backend API</span>
           <div className="flex items-center space-x-2">
-            {getStatusIcon(true, false)}
-            <span className={`text-sm ${true ? 'text-green-600' : 'text-red-600'}`}>
-              {getStatusText(true, false)}
+            {getStatusIcon(aiHealth?.success, isLoading)}
+            <span className={`text-sm ${aiHealth?.success ? 'text-green-600' : 'text-red-600'}`}>
+              {getStatusText(aiHealth?.success, isLoading)}
             </span>
           </div>
         </div>

@@ -7,6 +7,7 @@
 ## Core Entities
 
 ### Customer
+
 Represents dining guests with preferences and session state.
 
 ```typescript
@@ -26,12 +27,14 @@ interface Customer {
 ```
 
 **Validation Rules**:
+
 - sessionId must be unique per active session
 - preferences.dietary must be from predefined list
 - spiceLevel must be 1-5 integer
 - lastActiveAt updated on every interaction
 
 ### MenuItem
+
 Contains dish details with rich metadata for AI conversations.
 
 ```typescript
@@ -65,6 +68,7 @@ interface MenuItem {
 ```
 
 **Validation Rules**:
+
 - price must be positive integer (cents)
 - category must be from predefined list
 - preparationTime must be positive integer
@@ -72,6 +76,7 @@ interface MenuItem {
 - ingredients and allergens must be from controlled vocabulary
 
 ### Order
+
 Tracks customer selections with modifications and status.
 
 ```typescript
@@ -121,12 +126,14 @@ enum PaymentStatus {
 ```
 
 **Validation Rules**:
+
 - quantity must be positive integer
 - totalAmount must equal sum of items + tax
 - status transitions must follow valid flow
 - unitPrice captures historical pricing
 
 ### Conversation
+
 Maintains dialogue context for coherent AI interactions.
 
 ```typescript
@@ -166,11 +173,13 @@ interface ConversationMessage {
 ```
 
 **Validation Rules**:
+
 - expiresAt must be within 4 hours of creation
 - messages must maintain chronological order
 - currentOrderId must exist if status is "ordering"
 
 ### Payment
+
 Handles transaction processing with audit trail.
 
 ```typescript
@@ -210,11 +219,13 @@ enum PaymentMethod {
 ```
 
 **Validation Rules**:
+
 - amount must match order total
 - splits must sum to total amount
 - payment method must be supported by restaurant
 
 ### Restaurant
+
 Configuration and settings for establishment.
 
 ```typescript
@@ -249,11 +260,13 @@ interface Restaurant {
 ```
 
 **Validation Rules**:
+
 - businessHours must have valid time format
 - taxRate must be 0-1 decimal
 - tipSuggestions must be positive integers
 
 ### Feedback
+
 Customer satisfaction and sentiment data.
 
 ```typescript
@@ -274,13 +287,14 @@ interface Feedback {
 ```
 
 **Validation Rules**:
+
 - ratings must be 1-5 integers
 - sentiment auto-calculated from comments if provided
 - linked order must be completed
 
 ## Relationships
 
-```
+```mermaid
 Restaurant (1) ←→ (N) MenuItem
 Restaurant (1) ←→ (N) Order
 Customer (1) ←→ (N) Order
@@ -295,14 +309,16 @@ Conversation (1) ←→ (0..1) Order [current order]
 ## State Transitions
 
 ### Order Status Flow
-```
+
+```mermaid
 DRAFT → SUBMITTED → ACKNOWLEDGED → PREPARING → READY → SERVED
          ↓
       CANCELLED (from any status except SERVED)
 ```
 
 ### Payment Status Flow
-```
+
+```mermaid
 PENDING → PROCESSING → COMPLETED
            ↓
          FAILED
@@ -311,7 +327,8 @@ COMPLETED → REFUNDED (partial or full)
 ```
 
 ### Conversation Context Flow
-```
+
+```mermaid
 "greeting" → "menu_exploration" → "ordering" → "payment" → "feedback"
                 ↑_______________|              ↑
                    (can cycle)                  |
@@ -321,6 +338,7 @@ COMPLETED → REFUNDED (partial or full)
 ## Performance Considerations
 
 ### Indexing Strategy
+
 - Customer: sessionId, tableNumber
 - MenuItem: restaurantId, category, availability.isAvailable
 - Order: customerId, restaurantId, status, createdAt
@@ -328,11 +346,13 @@ COMPLETED → REFUNDED (partial or full)
 - Payment: orderId, status
 
 ### Caching Strategy
+
 - MenuItem: Cache by restaurantId (TTL: 1 hour, invalidate on POS sync)
 - Customer preferences: Cache in Redis (TTL: session duration)
 - Conversation context: Store in Redis for fast access
 
 ### Data Cleanup
+
 - Conversations: Auto-delete after expiresAt
 - Customer sessions: Archive after 24 hours of inactivity
 - Feedback: Aggregate to analytics after 30 days

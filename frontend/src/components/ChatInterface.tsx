@@ -1,5 +1,5 @@
 // AI Chat Interface Component
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Send, MessageSquare, User, Bot, Loader2 } from 'lucide-react';
 import { 
   useConversationMessages, 
@@ -39,7 +39,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const startConversationMutation = useStartConversationWithMessage();
   const chatMutation = useChatWithAI();
 
-  const messages = messagesResponse?.success ? messagesResponse.data || [] : [];
+  const messages = useMemo(() => {
+    return messagesResponse?.success ? messagesResponse.data || [] : [];
+  }, [messagesResponse]);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -128,7 +130,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
-        {messagesError && (
+        {!!messagesError && (
           <div className="text-center text-red-500 p-4">
             Failed to load messages. Please try again.
           </div>
