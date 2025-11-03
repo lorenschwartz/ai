@@ -1,0 +1,50 @@
+{
+  "name": "AI-Mi Restaurant Assistant",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-eslint"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.preferences.importModuleSpecifier": "relative"
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 3001],
+  "portsAttributes": {
+    "3000": {
+      "label": "AI-Mi Frontend",
+      "onAutoForward": "openBrowser"
+    },
+    "3001": {
+      "label": "AI-Mi Backend API",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "npm install --prefix backend && npm install --prefix frontend",
+  
+  "postStartCommand": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev"
+  },
+
+  "remoteUser": "node",
+  
+  "workspaceFolder": "/workspaces/ai-mi"
+}

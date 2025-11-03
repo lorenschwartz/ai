@@ -4,7 +4,20 @@ An intelligent conversational ordering system that provides personalized dining 
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🌐 Demo with GitHub Codespaces (Recommended)
+
+**Try AI-Mi instantly without any setup:**
+
+1. **Click the "Code" button** on this GitHub repository
+2. **Select "Codespaces" tab**
+3. **Click "Create codespace"**
+4. **Wait for automatic setup** (2-3 minutes)
+5. **Click the forwarded port 3000** to open the demo
+6. **Start chatting with your AI waiter!** 🤖
+
+### 💻 Local Development
+
+#### Prerequisites
 
 - **Node.js 18+** (check with `node --version`)
 - **npm** (comes with Node.js)
