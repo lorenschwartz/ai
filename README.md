@@ -6,19 +6,21 @@ An intelligent conversational ordering system that provides personalized dining 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL
 - Redis
 
 ### Development Setup
 
 1. **Clone and navigate to the project:**
+
    ```bash
    git clone <repository-url>
    cd ai-mi
    ```
 
 2. **Backend Setup:**
+
    ```bash
    cd backend
    npm install
@@ -28,6 +30,7 @@ An intelligent conversational ordering system that provides personalized dining 
    ```
 
 3. **Frontend Setup:**
+
    ```bash
    cd frontend
    npm install
@@ -37,6 +40,7 @@ An intelligent conversational ordering system that provides personalized dining 
    ```
 
 4. **Access the application:**
+
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:3001
    - Health Check: http://localhost:3001/health

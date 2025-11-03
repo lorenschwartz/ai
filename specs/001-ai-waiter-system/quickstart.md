@@ -10,13 +10,14 @@ The AI Waiter System replaces traditional restaurant menus with a conversational
 
 ## Architecture at a Glance
 
-```
+```mermaid
 Customer ←→ Frontend (React) ←→ Backend (Node.js) ←→ AI (OpenAI) + Database (PostgreSQL) + POS System
 ```
 
 ## Quick Setup (Development)
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - PostgreSQL 14+
 - Redis 6+
@@ -73,30 +74,36 @@ redis-server
 ## Core User Flows
 
 ### 1. Customer Ordering Flow
-```
+
+```mermaid
 Access Web App → Start Conversation → Explore Menu → Add Items → Review Order → Pay → Receive Confirmation
 ```
 
 **Key Components:**
+
 - `frontend/src/components/chat/ConversationInterface.tsx`
 - `backend/src/services/conversation-ai.js`
 - `backend/src/api/routes/orders.js`
 
 ### 2. Menu Management Flow  
-```
+
+```mermaid
 POS System → Webhook → Update Menu → Invalidate Cache → Notify Active Sessions
 ```
 
 **Key Components:**
+
 - `backend/src/services/pos-integration.js`
 - `backend/src/models/menu-item.js`
 
 ### 3. Payment Processing Flow
-```
+
+```mermaid
 Customer Selects Payment → Stripe Processing → Split Handling → Receipt Generation → Loyalty Update
 ```
 
 **Key Components:**
+
 - `frontend/src/components/payment/PaymentForm.tsx`
 - `backend/src/services/payment.js`
 
@@ -105,6 +112,7 @@ Customer Selects Payment → Stripe Processing → Split Handling → Receipt Ge
 ### Restaurant Setup (Admin Dashboard)
 
 1. **Basic Information**
+
    ```json
    {
      "name": "Demo Restaurant",
@@ -127,6 +135,7 @@ Customer Selects Payment → Stripe Processing → Split Handling → Receipt Ge
 ### AI Conversation Settings
 
 **Tone Configuration:**
+
 ```json
 {
   "tone": "friendly",
@@ -137,6 +146,7 @@ Customer Selects Payment → Stripe Processing → Split Handling → Receipt Ge
 ```
 
 **Recommendation Rules:**
+
 - Dietary preference matching
 - Price point considerations  
 - Popularity scoring
@@ -145,6 +155,7 @@ Customer Selects Payment → Stripe Processing → Split Handling → Receipt Ge
 ## Testing Strategy
 
 ### 1. Component Tests
+
 ```bash
 # Frontend component testing
 npm run test:frontend
@@ -154,6 +165,7 @@ npm run test:backend
 ```
 
 ### 2. Integration Tests
+
 ```bash
 # API endpoint testing
 npm run test:integration
@@ -163,6 +175,7 @@ npm run test:conversation
 ```
 
 ### 3. End-to-End Tests
+
 ```bash
 # Full user journey testing
 npm run test:e2e
@@ -182,6 +195,7 @@ npm run test:e2e:voice
    - SSL certificate (required for voice input)
 
 2. **Environment Variables**
+
    ```bash
    NODE_ENV=production
    DATABASE_URL=postgresql://...
@@ -191,6 +205,7 @@ npm run test:e2e:voice
    ```
 
 3. **Deploy Commands**
+
    ```bash
    npm run build
    npm run db:migrate:prod
@@ -200,12 +215,14 @@ npm run test:e2e:voice
 ### Monitoring & Observability
 
 **Key Metrics:**
+
 - Conversation response time (<2s target)
 - Order accuracy (>98% target)
 - Payment success rate (>99% target)
 - Customer satisfaction ratings
 
 **Logging:**
+
 - All conversations logged for AI improvement
 - Order events tracked for audit trail
 - Payment transactions logged for compliance
@@ -214,17 +231,20 @@ npm run test:e2e:voice
 
 ### Common Issues
 
-**"AI not responding"**
+#### "AI not responding"
+
 - Check OpenAI API key and quota
 - Verify network connectivity
 - Check conversation context size limits
 
-**"Payment failed"**  
+#### "Payment failed"
+
 - Verify Stripe webhook configuration
 - Check payment method compatibility
 - Confirm test vs. live keys
 
-**"Menu items not updating"**
+#### "Menu items not updating"
+
 - Verify POS system webhook setup
 - Check cache invalidation
 - Confirm database connectivity
@@ -232,18 +252,21 @@ npm run test:e2e:voice
 ### Development Tools
 
 **Database Inspection:**
+
 ```bash
 npm run db:console
 # Opens PostgreSQL command line
 ```
 
 **Redis Monitoring:**
+
 ```bash
 redis-cli monitor
 # Shows real-time Redis operations
 ```
 
 **API Testing:**
+
 ```bash
 npm run api:docs
 # Opens interactive API documentation
@@ -252,18 +275,21 @@ npm run api:docs
 ## Next Steps
 
 ### Phase 1 Implementation Priority
+
 1. **Core Conversation Engine** - Natural language menu exploration
 2. **Basic Ordering System** - Add items to cart, calculate totals  
 3. **Payment Processing** - Stripe integration with receipt generation
 4. **Admin Dashboard** - Menu management and order monitoring
 
 ### Phase 2 Enhancements
+
 1. **Advanced Recommendations** - ML-based suggestion engine
 2. **Split Payment Features** - Multiple payment methods per order
 3. **Real-time Updates** - Live order status from kitchen
 4. **Voice Input Optimization** - Enhanced speech recognition
 
 ### Production Checklist
+
 - [ ] SSL certificate installed
 - [ ] Database backups configured
 - [ ] Monitoring alerts set up
@@ -274,16 +300,19 @@ npm run api:docs
 ## Support & Resources
 
 **Documentation:**
+
 - [API Reference](./contracts/api-spec.json)
 - [Data Model](./data-model.md)
 - [Technical Research](./research.md)
 
 **Development:**
+
 - [Component Library](../frontend/src/components/README.md)
 - [Testing Guide](../tests/README.md)
 - [Deployment Guide](../docs/deployment.md)
 
 **External Integrations:**
+
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 - [Stripe API Reference](https://stripe.com/docs/api)
 - [POS System Integration Guide](../docs/pos-integrations.md)

@@ -5,18 +5,21 @@ The backend API server for the AI-powered restaurant waiter system.
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
-2. Copy environment variables:
+1. Copy environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
-3. Update the `.env` file with your actual configuration values.
+1. Update the `.env` file with your actual configuration values.
 
-4. Start the development server:
+1. Start the development server:
+
 ```bash
 npm run dev
 ```

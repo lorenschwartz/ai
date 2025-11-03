@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { Conversation, ConversationValidator } from '../../models/Conversation';
 import { CustomerValidator } from '../../models/Customer';
+import { aiService, AIConversationContext } from '../../services/AIService';
 import { z } from 'zod';
 import crypto from 'crypto';
 
@@ -221,7 +222,8 @@ router.post('/:id/messages', async (req: Request, res: Response) => {
       });
     }
 
-    const updatedConversation = ConversationValidator.addMessage(conversation, {
+    // Add the customer's message
+    let updatedConversation = ConversationValidator.addMessage(conversation, {
       role: messageData.role,
       content: messageData.content,
       ...(messageData.metadata && { 
@@ -236,12 +238,81 @@ router.post('/:id/messages', async (req: Request, res: Response) => {
     mockConversations.set(id, updatedConversation);
     const addedMessage = ConversationValidator.getLastMessage(updatedConversation);
 
+    // If customer sent a message, generate AI response
+    let aiResponse = null;
+    if (messageData.role === 'customer') {
+      try {
+        // Build context for AI
+        const customer = mockCustomers.get(updatedConversation.customerId);
+        const aiContext: AIConversationContext = {
+          customer,
+          previousMessages: updatedConversation.messages.slice(-10), // Last 10 messages for context
+          menuItems: [], // TODO: Fetch relevant menu items
+          restaurantInfo: {
+            name: process.env.RESTAURANT_NAME || 'AI-Mi Restaurant',
+            description: process.env.RESTAURANT_DESCRIPTION || 'A modern dining experience with AI-powered service',
+            specialties: ['Contemporary cuisine', 'Fresh ingredients', 'Innovative presentation'],
+            hours: process.env.RESTAURANT_HOURS || '11:00 AM - 10:00 PM daily'
+          }
+        };
+
+        // Generate AI response
+        const aiResponseData = await aiService.generateResponse(messageData.content, aiContext);
+        
+        // Add AI response to conversation
+        const aiMessageMetadata: any = {
+          confidence: aiResponseData.confidence
+        };
+        
+        if (aiResponseData.intent) {
+          aiMessageMetadata.intent = aiResponseData.intent;
+        }
+        
+        if (aiResponseData.suggestedMenuItems && aiResponseData.suggestedMenuItems.length > 0) {
+          aiMessageMetadata.entities = { suggestedMenuItems: aiResponseData.suggestedMenuItems };
+        }
+        
+        updatedConversation = ConversationValidator.addMessage(updatedConversation, {
+          role: 'ai',
+          content: aiResponseData.message,
+          metadata: aiMessageMetadata
+        });
+
+        mockConversations.set(id, updatedConversation);
+        aiResponse = ConversationValidator.getLastMessage(updatedConversation);
+
+        // Update conversation context if needed
+        if (aiResponseData.intent && aiResponseData.intent !== 'general_chat') {
+          const contextUpdate: any = {};
+          
+          if (aiResponseData.intent === 'menu_inquiry') {
+            contextUpdate.currentTopic = 'menu_exploration';
+            contextUpdate.customerIntent = 'browsing';
+          } else if (aiResponseData.intent === 'order_intent') {
+            contextUpdate.currentTopic = 'ordering';
+            contextUpdate.customerIntent = 'ordering';
+          }
+          
+          if (Object.keys(contextUpdate).length > 0) {
+            updatedConversation = ConversationValidator.updateContext(updatedConversation, contextUpdate);
+            mockConversations.set(id, updatedConversation);
+          }
+        }
+
+      } catch (aiError) {
+        console.error('AI Response Error:', aiError);
+        // Continue without AI response - don't fail the entire request
+      }
+    }
+
     return res.json({
       success: true,
       data: {
         conversationId: id,
-        message: addedMessage,
-        totalMessages: updatedConversation.messages.length
+        userMessage: addedMessage,
+        aiResponse,
+        totalMessages: updatedConversation.messages.length,
+        context: updatedConversation.context
       }
     });
 

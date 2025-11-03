@@ -3,6 +3,7 @@ import menuRoutes from './routes/menu';
 import customerRoutes from './routes/customers';
 import conversationRoutes from './routes/conversations';
 import orderRoutes from './routes/orders-simple';
+import aiRoutes from './routes/ai';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use(`/${API_VERSION}/menu`, menuRoutes);
 router.use(`/${API_VERSION}/customers`, customerRoutes);
 router.use(`/${API_VERSION}/conversations`, conversationRoutes);
 router.use(`/${API_VERSION}/orders`, orderRoutes);
+router.use(`/${API_VERSION}/ai`, aiRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -25,7 +27,8 @@ router.get('/health', (req, res) => {
       menu: `/${API_VERSION}/menu`,
       customers: `/${API_VERSION}/customers`,
       conversations: `/${API_VERSION}/conversations`,
-      orders: `/${API_VERSION}/orders`
+      orders: `/${API_VERSION}/orders`,
+      ai: `/${API_VERSION}/ai`
     }
   });
 });
