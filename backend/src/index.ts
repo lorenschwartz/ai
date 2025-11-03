@@ -52,17 +52,9 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-// API routes will be added here
-app.use('/api', (_req, res) => {
-  res.status(200).json({ 
-    message: 'AI-Mi API Server',
-    version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      api: '/api'
-    }
-  });
-});
+// API routes
+import apiRoutes from './api';
+app.use('/api', apiRoutes);
 
 // Error handling middleware
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
