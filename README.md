@@ -6,44 +6,100 @@ An intelligent conversational ordering system that provides personalized dining 
 
 ### Prerequisites
 
-- Node.js 18+
-- PostgreSQL
-- Redis
+- **Node.js 18+** (check with `node --version`)
+- **npm** (comes with Node.js)
+- **OpenAI API Key** (already configured)
 
-### Development Setup
+### Launch Instructions
 
-1. **Clone and navigate to the project:**
+#### **Step 1: Start the Backend Server**
 
-   ```bash
-   git clone <repository-url>
-   cd ai-mi
-   ```
+Open a terminal and run:
 
-2. **Backend Setup:**
+```bash
+cd backend
+npm run dev
+```
 
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Update .env with your configuration
-   npm run dev
-   ```
+**Expected output:**
+```
+🚀 AI-Mi backend server running on port 3001
+🏥 Health check: http://localhost:3001/health
+📡 API base URL: http://localhost:3001/api
+🌍 Environment: development
+✅ OpenAI API key configured - AI features enabled
+```
 
-3. **Frontend Setup:**
+#### **Step 2: Start the Frontend Application**
 
-   ```bash
-   cd frontend
-   npm install
-   cp .env.example .env
-   # Update .env with your configuration
-   npm run dev
-   ```
+Open a **new terminal window** and run:
 
-4. **Access the application:**
+```bash
+cd frontend
+npm run dev
+```
 
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
-   - Health Check: http://localhost:3001/health
+**Expected output:**
+```
+VITE v5.4.21  ready in 355 ms
+➜  Local:   http://localhost:3000/
+➜  Network: use --host to expose
+```
+
+#### **Step 3: Access Your Application**
+
+Open your web browser and go to: **http://localhost:3000**
+
+### 🧪 Test Your AI Assistant
+
+1. **Set up your customer profile:**
+   - Enter your name
+   - Add table number (optional)
+   - Select dietary preferences and allergies
+   - Choose spice level
+   - Click "Start Chatting"
+
+2. **Try these AI conversations:**
+   - "Show me the menu"
+   - "I'm vegetarian, what do you recommend?"
+   - "I have a nut allergy, what's safe?"
+   - "What's popular today?"
+   - "I'd like to place an order"
+
+### 🔧 Troubleshooting
+
+**Backend won't start:**
+```bash
+# Kill any existing processes
+pkill -f nodemon
+# Try again
+npm run dev
+```
+
+**Frontend won't start:**
+```bash
+# Kill any existing processes  
+pkill -f vite
+# Try again
+npm run dev
+```
+
+**AI not responding:**
+- Check that the OpenAI API key is in `backend/.env`
+- Look for errors in the backend terminal
+
+### 🛑 To Stop Everything
+
+Press `Ctrl + C` in both terminal windows to stop the servers.
+
+### ✅ Success Indicators
+
+When everything is working correctly, you should see:
+- ✅ Backend: Online (in the right sidebar)
+- ✅ API: Online 
+- ✅ AI Service: Online
+- ✅ Chat interface responds to your messages
+- ✅ AI provides restaurant recommendations
 
 ## 🏗️ Project Structure
 
@@ -97,12 +153,17 @@ ai-mi/
 ## 📝 Development Status
 
 - ✅ Project structure and configuration
-- ✅ Basic backend API server
-- ✅ Frontend React application
-- 🔨 API development in progress
-- 🔨 Database models and schemas
-- 🔨 AI conversation engine
-- 🔨 Payment integration
+- ✅ Complete backend API server with 20+ endpoints
+- ✅ Full-featured React frontend application
+- ✅ Complete API integration with React Query
+- ✅ AI conversation engine with OpenAI GPT-4
+- ✅ Customer management and preferences
+- ✅ Menu system with search and filtering
+- ✅ Real-time chat interface
+- ✅ Responsive mobile-friendly design
+- ✅ TypeScript throughout with full type safety
+- 🔨 Payment integration (planned for future release)
+- 🔨 Database integration (optional - uses in-memory storage)
 
 ## 🤝 Contributing
 
