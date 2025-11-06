@@ -3,20 +3,20 @@ import { z } from 'zod';
 import { DIETARY_TAGS, ALLERGENS } from './types';
 
 export interface MenuItem {
-  id: string;                    // UUID
-  restaurantId: string;          // Foreign key
-  name: string;                  // Display name
-  description: string;           // Detailed description for AI
-  category: MenuCategory;        // "appetizer", "entree", "dessert", "beverage"
-  price: number;                 // In cents for precision
-  ingredients: string[];         // For allergy/dietary filtering
-  dietaryTags: DietaryTag[];     // ["vegetarian", "vegan", "gluten-free"]
-  allergens: Allergen[];         // ["nuts", "dairy", "gluten", "shellfish"]
-  spiceLevel?: number;           // 1-5 scale if applicable
-  preparationTime: number;       // Minutes
+  id: string; // UUID
+  restaurantId: string; // Foreign key
+  name: string; // Display name
+  description: string; // Detailed description for AI
+  category: MenuCategory; // "appetizer", "entree", "dessert", "beverage"
+  price: number; // In cents for precision
+  ingredients: string[]; // For allergy/dietary filtering
+  dietaryTags: DietaryTag[]; // ["vegetarian", "vegan", "gluten-free"]
+  allergens: Allergen[]; // ["nuts", "dairy", "gluten", "shellfish"]
+  spiceLevel?: number; // 1-5 scale if applicable
+  preparationTime: number; // Minutes
   availability: {
     isAvailable: boolean;
-    reason?: string;             // "out of stock", "seasonal", etc.
+    reason?: string; // "out of stock", "seasonal", etc.
   };
   nutritionInfo?: {
     calories: number;
@@ -25,13 +25,35 @@ export interface MenuItem {
     fat: number;
   };
   imageUrl?: string;
-  popularityScore: number;       // For recommendations (0-100)
+  popularityScore: number; // For recommendations (0-100)
   createdAt: Date;
   updatedAt: Date;
 }
 
 // Validation schema
-const MENU_CATEGORIES = ["appetizer", "entree", "dessert", "beverage"] as const;
+const MENU_CATEGORIES = [
+  'appetizer',
+  'soup',
+  'chicken',
+  'beef',
+  'pork',
+  'seafood',
+  'vegetable',
+  'noodle',
+  'fried-rice',
+  'rice-platter',
+  'big-bowl-noodles',
+  'duck',
+  'sushi-roll',
+  'sushi-sashimi',
+  'hand-roll',
+  'sushi-platter',
+  'sushi-combo',
+  'family-meal',
+  'dessert',
+  'beverage',
+  'condiment',
+] as const;
 
 export const MenuItemSchema = z.object({
   id: z.string().uuid(),
@@ -47,18 +69,20 @@ export const MenuItemSchema = z.object({
   preparationTime: z.number().int().positive(),
   availability: z.object({
     isAvailable: z.boolean(),
-    reason: z.string().optional()
+    reason: z.string().optional(),
   }),
-  nutritionInfo: z.object({
-    calories: z.number().int().nonnegative(),
-    protein: z.number().nonnegative(),
-    carbs: z.number().nonnegative(),
-    fat: z.number().nonnegative()
-  }).optional(),
+  nutritionInfo: z
+    .object({
+      calories: z.number().int().nonnegative(),
+      protein: z.number().nonnegative(),
+      carbs: z.number().nonnegative(),
+      fat: z.number().nonnegative(),
+    })
+    .optional(),
   imageUrl: z.string().url().optional(),
   popularityScore: z.number().int().min(0).max(100),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 });
 
 export type MenuItemInput = z.infer<typeof MenuItemSchema>;
@@ -85,11 +109,19 @@ export class MenuItemValidator {
     return menuItem.price / 100;
   }
 
-  static matchesAllergies(menuItem: MenuItem, customerAllergies: Allergen[]): boolean {
-    return !customerAllergies.some(allergen => menuItem.allergens.includes(allergen));
+  static matchesAllergies(
+    menuItem: MenuItem,
+    customerAllergies: Allergen[]
+  ): boolean {
+    return !customerAllergies.some(allergen =>
+      menuItem.allergens.includes(allergen)
+    );
   }
 
-  static matchesDietaryRequirements(menuItem: MenuItem, dietaryTags: DietaryTag[]): boolean {
+  static matchesDietaryRequirements(
+    menuItem: MenuItem,
+    dietaryTags: DietaryTag[]
+  ): boolean {
     return dietaryTags.every(tag => menuItem.dietaryTags.includes(tag));
   }
 }
