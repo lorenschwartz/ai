@@ -9,22 +9,28 @@ const router = Router();
 
 // Request schemas
 const CreateCustomerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email().optional().or(z.literal("")),
+  phone: z.string().optional(),
   tableNumber: z.string().optional(),
   preferences: z.object({
-    dietary: z.array(z.enum(DIETARY_TAGS)).default([]),
-    allergies: z.array(z.enum(ALLERGENS)).default([]),
-    spiceLevel: z.number().int().min(1).max(5).default(3),
-    previousOrders: z.array(z.string()).optional()
-  }).default({})
+    dietaryRestrictions: z.array(z.string()).default([]),
+    allergies: z.array(z.string()).default([]),
+    favoriteItems: z.array(z.string()).optional(),
+    spiceLevel: z.enum(['mild', 'medium', 'hot', 'extra-hot']).default('medium'),
+  }).optional().default({})
 });
 
 const UpdateCustomerSchema = z.object({
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
   tableNumber: z.string().optional(),
   preferences: z.object({
-    dietary: z.array(z.enum(DIETARY_TAGS)).optional(),
-    allergies: z.array(z.enum(ALLERGENS)).optional(),
-    spiceLevel: z.number().int().min(1).max(5).optional(),
-    previousOrders: z.array(z.string()).optional()
+    dietaryRestrictions: z.array(z.string()).optional(),
+    allergies: z.array(z.string()).optional(),
+    spiceLevel: z.enum(['mild', 'medium', 'hot', 'extra-hot']).optional(),
+    favoriteItems: z.array(z.string()).optional()
   }).optional()
 });
 
@@ -38,13 +44,16 @@ router.post('/', async (req: Request, res: Response) => {
     
     const customer: Customer = {
       id: crypto.randomUUID(),
+      name: customerData.name,
+      ...(customerData.email && { email: customerData.email }),
+      ...(customerData.phone && { phone: customerData.phone }),
       sessionId: crypto.randomUUID(),
       ...(customerData.tableNumber && { tableNumber: customerData.tableNumber }),
       preferences: {
-        dietary: customerData.preferences.dietary,
-        allergies: customerData.preferences.allergies,
-        spiceLevel: customerData.preferences.spiceLevel,
-        ...(customerData.preferences.previousOrders && { previousOrders: customerData.preferences.previousOrders })
+        dietaryRestrictions: customerData.preferences?.dietaryRestrictions || [],
+        allergies: customerData.preferences?.allergies || [],
+        spiceLevel: customerData.preferences?.spiceLevel || 'medium',
+        ...(customerData.preferences?.favoriteItems && { favoriteItems: customerData.preferences.favoriteItems })
       },
       createdAt: new Date(),
       lastActiveAt: new Date()
@@ -171,12 +180,15 @@ router.put('/:id', async (req: Request, res: Response) => {
     // Update customer data
     const updatedCustomer: Customer = {
       ...customer,
+      ...(updateData.name && { name: updateData.name }),
+      ...(updateData.email && { email: updateData.email }),
+      ...(updateData.phone && { phone: updateData.phone }),
       ...(updateData.tableNumber && { tableNumber: updateData.tableNumber }),
       preferences: {
-        dietary: updateData.preferences?.dietary || customer.preferences.dietary,
+        dietaryRestrictions: updateData.preferences?.dietaryRestrictions || customer.preferences.dietaryRestrictions,
         allergies: updateData.preferences?.allergies || customer.preferences.allergies,
         spiceLevel: updateData.preferences?.spiceLevel || customer.preferences.spiceLevel,
-        ...(updateData.preferences?.previousOrders && { previousOrders: updateData.preferences.previousOrders })
+        ...(updateData.preferences?.favoriteItems && { favoriteItems: updateData.preferences.favoriteItems })
       },
       lastActiveAt: new Date()
     };

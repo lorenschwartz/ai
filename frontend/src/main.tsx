@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import App from './App';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -7,14 +8,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>,
 );
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>AI-MI</h1>
-        <p>Welcome to AI-MI</p>
-      </header>
-    </div>
-  );
-}

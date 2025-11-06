@@ -2,13 +2,16 @@ import { DietaryTag, Allergen } from './types';
 
 export interface Customer {
   id: string;                    // UUID
+  name: string;                  // Customer name
+  email?: string;                // Customer email
+  phone?: string;                // Customer phone
   sessionId: string;             // Current dining session
   tableNumber?: string;          // Physical table identifier
   preferences: {
-    dietary: DietaryTag[];       // ["vegetarian", "gluten-free", "dairy-free"]
-    allergies: Allergen[];       // ["nuts", "shellfish", "eggs"] 
-    spiceLevel: number;          // 1-5 scale
-    previousOrders?: string[];   // Historical order IDs for recommendations
+    dietaryRestrictions: string[];  // ["vegetarian", "gluten-free", "dairy-free"]
+    allergies: string[];            // ["nuts", "shellfish", "eggs"] 
+    spiceLevel: 'mild' | 'medium' | 'hot' | 'extra-hot';  // Spice preference
+    favoriteItems?: string[];       // Favorite menu items
   };
   createdAt: Date;
   lastActiveAt: Date;
@@ -20,13 +23,16 @@ import { DIETARY_TAGS, ALLERGENS } from './types';
 
 export const CustomerSchema = z.object({
   id: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
   sessionId: z.string().min(1),
   tableNumber: z.string().optional(),
   preferences: z.object({
-    dietary: z.array(z.enum(DIETARY_TAGS)),
-    allergies: z.array(z.enum(ALLERGENS)),
-    spiceLevel: z.number().int().min(1).max(5),
-    previousOrders: z.array(z.string().uuid()).optional()
+    dietaryRestrictions: z.array(z.string()),
+    allergies: z.array(z.string()),
+    spiceLevel: z.enum(['mild', 'medium', 'hot', 'extra-hot']),
+    favoriteItems: z.array(z.string()).optional()
   }),
   createdAt: z.date(),
   lastActiveAt: z.date()

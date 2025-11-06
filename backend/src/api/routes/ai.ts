@@ -31,11 +31,15 @@ router.post('/chat', async (req: Request, res: Response) => {
       ...(testData.context?.customerPreferences && {
         customer: {
           id: 'test-customer',
+          name: 'Test Customer',
           sessionId: 'test-session',
           preferences: {
-            dietary: testData.context.customerPreferences.dietary || [],
+            dietaryRestrictions: testData.context.customerPreferences.dietary || [],
             allergies: testData.context.customerPreferences.allergies || [],
-            spiceLevel: testData.context.customerPreferences.spiceLevel || 3,
+            spiceLevel: testData.context.customerPreferences.spiceLevel === 1 ? 'mild' : 
+                       testData.context.customerPreferences.spiceLevel === 2 ? 'mild' :
+                       testData.context.customerPreferences.spiceLevel === 3 ? 'medium' :
+                       testData.context.customerPreferences.spiceLevel === 4 ? 'hot' : 'extra-hot',
           },
           createdAt: new Date(),
           lastActiveAt: new Date()
@@ -159,11 +163,15 @@ router.post('/test-scenarios', async (req: Request, res: Response) => {
           ...(scenario.context.customerPreferences && {
             customer: {
               id: 'test-customer',
+              name: 'Test Customer',
               sessionId: 'test-session',
               preferences: {
-                dietary: scenario.context.customerPreferences.dietary || [],
+                dietaryRestrictions: scenario.context.customerPreferences.dietary || [],
                 allergies: [],
-                spiceLevel: scenario.context.customerPreferences.spiceLevel || 3,
+                spiceLevel: scenario.context.customerPreferences.spiceLevel === 1 ? 'mild' : 
+                           scenario.context.customerPreferences.spiceLevel === 2 ? 'mild' :
+                           scenario.context.customerPreferences.spiceLevel === 3 ? 'medium' :
+                           scenario.context.customerPreferences.spiceLevel === 4 ? 'hot' : 'extra-hot',
               },
               createdAt: new Date(),
               lastActiveAt: new Date()

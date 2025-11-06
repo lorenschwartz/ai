@@ -109,9 +109,9 @@ export class AIService {
 
     const customerInfo = context.customer ? 
       `Customer ID: ${context.customer.id} (Table ${context.customer.tableNumber || 'Not assigned'})
-      Dietary preferences: ${context.customer.preferences?.dietary?.join(', ') || 'None specified'}
+      Dietary restrictions: ${context.customer.preferences?.dietaryRestrictions?.join(', ') || 'None specified'}
       Allergies: ${context.customer.preferences?.allergies?.join(', ') || 'None specified'}
-      Spice level preference: ${context.customer.preferences?.spiceLevel || 'Not specified'}/5` : '';
+      Spice level preference: ${context.customer.preferences?.spiceLevel || 'medium'}` : '';
 
     const menuContext = context.menuItems?.length ? 
       `Available menu items: ${context.menuItems.map(item => 
