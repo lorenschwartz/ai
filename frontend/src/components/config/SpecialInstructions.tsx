@@ -53,7 +53,8 @@ export const SpecialInstructions: React.FC<SpecialInstructionsProps> = ({ classN
       setLoading(true);
       const response = await ConfigService.getInstructions();
       if (response.success && response.data) {
-        setInstructions(response.data.data);
+        // API returns data directly as array in the response
+        setInstructions(Array.isArray(response.data) ? response.data : []);
       } else {
         setError(response.error || 'Failed to load instructions');
       }

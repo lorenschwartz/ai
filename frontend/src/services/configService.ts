@@ -25,13 +25,13 @@ export class ConfigService {
   }
 
   // Tables Management
-  static async getTables(filters?: { status?: string; isActive?: boolean }): Promise<ApiResponse<{ data: Table[]; total: number }>> {
+  static async getTables(filters?: { status?: string; isActive?: boolean }): Promise<ApiResponse<Table[]>> {
     const params = new URLSearchParams();
     if (filters?.status) params.append('status', filters.status);
     if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
     
     const query = params.toString() ? `?${params.toString()}` : '';
-    return apiCall<{ data: Table[]; total: number }>('GET', `/config/tables${query}`);
+    return apiCall<Table[]>('GET', `/config/tables${query}`);
   }
 
   static async getTable(id: string): Promise<ApiResponse<Table>> {
@@ -56,7 +56,7 @@ export class ConfigService {
     priority?: string; 
     isActive?: boolean; 
     showToAI?: boolean 
-  }): Promise<ApiResponse<{ data: SpecialInstruction[]; total: number }>> {
+  }): Promise<ApiResponse<SpecialInstruction[]>> {
     const params = new URLSearchParams();
     if (filters?.type) params.append('type', filters.type);
     if (filters?.priority) params.append('priority', filters.priority);
@@ -64,11 +64,11 @@ export class ConfigService {
     if (filters?.showToAI !== undefined) params.append('showToAI', String(filters.showToAI));
     
     const query = params.toString() ? `?${params.toString()}` : '';
-    return apiCall<{ data: SpecialInstruction[]; total: number }>('GET', `/config/instructions${query}`);
+    return apiCall<SpecialInstruction[]>('GET', `/config/instructions${query}`);
   }
 
-  static async getAIInstructions(): Promise<ApiResponse<{ data: SpecialInstruction[]; total: number }>> {
-    return apiCall<{ data: SpecialInstruction[]; total: number }>('GET', '/config/instructions/ai');
+  static async getAIInstructions(): Promise<ApiResponse<SpecialInstruction[]>> {
+    return apiCall<SpecialInstruction[]>('GET', '/config/instructions/ai');
   }
 
   static async getInstruction(id: string): Promise<ApiResponse<SpecialInstruction>> {

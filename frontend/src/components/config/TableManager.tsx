@@ -41,7 +41,8 @@ export const TableManager: React.FC<TableManagerProps> = ({ className = '' }) =>
       setLoading(true);
       const response = await ConfigService.getTables();
       if (response.success && response.data) {
-        setTables(response.data.data);
+        // API returns data directly as array in the response
+        setTables(Array.isArray(response.data) ? response.data : []);
       } else {
         setError(response.error || 'Failed to load tables');
       }

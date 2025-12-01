@@ -50,7 +50,8 @@ export const MenuItemManager: React.FC<MenuItemManagerProps> = ({ className = ''
       setLoading(true);
       const response = await MenuService.getMenuItems();
       if (response.success && response.data) {
-        setMenuItems(response.data.data || []);
+        // API returns data directly as array in the response
+        setMenuItems(Array.isArray(response.data) ? response.data : []);
       } else {
         setError(response.error || 'Failed to load menu items');
       }
