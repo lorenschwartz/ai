@@ -121,7 +121,7 @@ export const MenuItemManager: React.FC<MenuItemManagerProps> = ({ className = ''
       ingredients: item.ingredients || [],
       dietaryTags: item.dietaryTags || [],
       allergens: item.allergens || [],
-      spiceLevel: item.spiceLevel as number | undefined,
+      spiceLevel: typeof item.spiceLevel === 'number' ? item.spiceLevel : undefined,
       preparationTime: item.preparationTime || 15,
       availability: item.isAvailable !== undefined 
         ? { isAvailable: item.isAvailable }

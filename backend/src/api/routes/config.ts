@@ -354,7 +354,14 @@ router.put('/tables/:id', async (req: Request, res: Response) => {
       });
     }
 
-    const existingTable = mockTables[tableIndex]!;
+    const existingTable = mockTables[tableIndex];
+    if (!existingTable) {
+      return res.status(404).json({
+        success: false,
+        error: 'Table not found'
+      });
+    }
+    
     const updatedTable: Table = {
       ...existingTable,
       updatedAt: new Date()
@@ -384,7 +391,7 @@ router.put('/tables/:id', async (req: Request, res: Response) => {
 
     return res.json({
       success: true,
-      data: mockTables[tableIndex]
+      data: updatedTable
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -589,7 +596,14 @@ router.put('/instructions/:id', async (req: Request, res: Response) => {
 
     const validatedData = UpdateSpecialInstructionSchema.parse(req.body);
 
-    const existingInstruction = mockSpecialInstructions[instructionIndex]!;
+    const existingInstruction = mockSpecialInstructions[instructionIndex];
+    if (!existingInstruction) {
+      return res.status(404).json({
+        success: false,
+        error: 'Special instruction not found'
+      });
+    }
+    
     const updatedInstruction: SpecialInstruction = {
       ...existingInstruction,
       updatedAt: new Date()
@@ -625,7 +639,7 @@ router.put('/instructions/:id', async (req: Request, res: Response) => {
 
     return res.json({
       success: true,
-      data: mockSpecialInstructions[instructionIndex]
+      data: updatedInstruction
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -735,17 +749,27 @@ router.put('/menu-items/:id', async (req: Request, res: Response) => {
       });
     }
 
-    mockMenuItems[itemIndex] = {
-      ...mockMenuItems[itemIndex]!,
+    const existingItem = mockMenuItems[itemIndex];
+    if (!existingItem) {
+      return res.status(404).json({
+        success: false,
+        error: 'Menu item not found'
+      });
+    }
+
+    const updatedItem: MenuItem = {
+      ...existingItem,
       ...req.body,
       updatedAt: new Date()
     };
+    
+    mockMenuItems[itemIndex] = updatedItem;
 
     return res.json({
       success: true,
       data: {
-        ...mockMenuItems[itemIndex]!,
-        priceInDollars: MenuItemValidator.calculatePriceInDollars(mockMenuItems[itemIndex]!)
+        ...updatedItem,
+        priceInDollars: MenuItemValidator.calculatePriceInDollars(updatedItem)
       }
     });
   } catch (error) {
