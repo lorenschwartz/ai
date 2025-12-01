@@ -213,6 +213,162 @@ export interface Restaurant {
   updatedAt: string;
 }
 
+// Restaurant configuration types
+export interface RestaurantConfig {
+  id: string;
+  name: string;
+  settings: {
+    businessHours: {
+      [day: string]: {
+        open: string;
+        close: string;
+        isOpen: boolean;
+      };
+    };
+    paymentMethods: string[];
+    taxRate: number;
+    tipSuggestions: number[];
+    posIntegration: {
+      provider: string;
+      apiKey: string;
+      webhookUrl: string;
+    };
+  };
+  branding: {
+    tone: string;
+    welcomeMessage: string;
+    logoUrl?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Table types
+export type TableStatus = 'available' | 'occupied' | 'reserved' | 'unavailable';
+
+export interface Table {
+  id: string;
+  restaurantId: string;
+  tableNumber: string;
+  capacity: number;
+  location?: string;
+  status: TableStatus;
+  qrCodeUrl?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTableRequest {
+  tableNumber: string;
+  capacity: number;
+  location?: string;
+  status?: TableStatus;
+  qrCodeUrl?: string;
+  isActive?: boolean;
+}
+
+export interface UpdateTableRequest {
+  tableNumber?: string;
+  capacity?: number;
+  location?: string;
+  status?: TableStatus;
+  qrCodeUrl?: string;
+  isActive?: boolean;
+}
+
+// Special Instruction types
+export type InstructionType = 'kitchen' | 'service' | 'dietary' | 'promotional' | 'general';
+export type InstructionPriority = 'low' | 'medium' | 'high' | 'critical';
+
+export interface SpecialInstruction {
+  id: string;
+  restaurantId: string;
+  title: string;
+  content: string;
+  type: InstructionType;
+  priority: InstructionPriority;
+  isActive: boolean;
+  showToAI: boolean;
+  validFrom?: string;
+  validUntil?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateSpecialInstructionRequest {
+  title: string;
+  content: string;
+  type: InstructionType;
+  priority?: InstructionPriority;
+  isActive?: boolean;
+  showToAI?: boolean;
+  validFrom?: string;
+  validUntil?: string;
+  createdBy?: string;
+}
+
+export interface UpdateSpecialInstructionRequest {
+  title?: string;
+  content?: string;
+  type?: InstructionType;
+  priority?: InstructionPriority;
+  isActive?: boolean;
+  showToAI?: boolean;
+  validFrom?: string;
+  validUntil?: string;
+}
+
+// Menu Item CRUD types
+export interface CreateMenuItemRequest {
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  ingredients?: string[];
+  dietaryTags?: string[];
+  allergens?: string[];
+  spiceLevel?: number;
+  preparationTime?: number;
+  availability?: {
+    isAvailable: boolean;
+    reason?: string;
+  };
+  nutritionInfo?: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+  imageUrl?: string;
+  popularityScore?: number;
+}
+
+export interface UpdateMenuItemRequest {
+  name?: string;
+  description?: string;
+  category?: string;
+  price?: number;
+  ingredients?: string[];
+  dietaryTags?: string[];
+  allergens?: string[];
+  spiceLevel?: number;
+  preparationTime?: number;
+  availability?: {
+    isAvailable: boolean;
+    reason?: string;
+  };
+  nutritionInfo?: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+  imageUrl?: string;
+  popularityScore?: number;
+}
+
 // Feedback types (for future use)
 export interface Feedback {
   id: string;

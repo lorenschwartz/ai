@@ -4,6 +4,7 @@ import customerRoutes from './routes/customers';
 import conversationRoutes from './routes/conversations';
 import orderRoutes from './routes/orders-simple';
 import aiRoutes from './routes/ai';
+import configRoutes from './routes/config';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use(`/${API_VERSION}/customers`, customerRoutes);
 router.use(`/${API_VERSION}/conversations`, conversationRoutes);
 router.use(`/${API_VERSION}/orders`, orderRoutes);
 router.use(`/${API_VERSION}/ai`, aiRoutes);
+router.use(`/${API_VERSION}/config`, configRoutes);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -28,7 +30,8 @@ router.get('/health', (req, res) => {
       customers: `/${API_VERSION}/customers`,
       conversations: `/${API_VERSION}/conversations`,
       orders: `/${API_VERSION}/orders`,
-      ai: `/${API_VERSION}/ai`
+      ai: `/${API_VERSION}/ai`,
+      config: `/${API_VERSION}/config`
     }
   });
 });
@@ -73,6 +76,32 @@ router.get('/', (req, res) => {
         addItem: `POST /api/${API_VERSION}/orders/:id/items`,
         customer: `GET /api/${API_VERSION}/orders/customer/:customerId`,
         cancel: `POST /api/${API_VERSION}/orders/:id/cancel`
+      },
+      config: {
+        restaurant: {
+          get: `GET /api/${API_VERSION}/config/restaurant`,
+          update: `PUT /api/${API_VERSION}/config/restaurant`
+        },
+        tables: {
+          list: `GET /api/${API_VERSION}/config/tables`,
+          get: `GET /api/${API_VERSION}/config/tables/:id`,
+          create: `POST /api/${API_VERSION}/config/tables`,
+          update: `PUT /api/${API_VERSION}/config/tables/:id`,
+          delete: `DELETE /api/${API_VERSION}/config/tables/:id`
+        },
+        instructions: {
+          list: `GET /api/${API_VERSION}/config/instructions`,
+          ai: `GET /api/${API_VERSION}/config/instructions/ai`,
+          get: `GET /api/${API_VERSION}/config/instructions/:id`,
+          create: `POST /api/${API_VERSION}/config/instructions`,
+          update: `PUT /api/${API_VERSION}/config/instructions/:id`,
+          delete: `DELETE /api/${API_VERSION}/config/instructions/:id`
+        },
+        menuItems: {
+          create: `POST /api/${API_VERSION}/config/menu-items`,
+          update: `PUT /api/${API_VERSION}/config/menu-items/:id`,
+          delete: `DELETE /api/${API_VERSION}/config/menu-items/:id`
+        }
       }
     },
     features: [
@@ -80,7 +109,8 @@ router.get('/', (req, res) => {
       'Customer session management',
       'AI-powered conversation handling',
       'Order management with status tracking',
-      'Real-time updates and notifications'
+      'Real-time updates and notifications',
+      'Configuration studio for restaurant onboarding'
     ]
   });
 });
