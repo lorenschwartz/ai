@@ -7,6 +7,8 @@ export * from './Conversation';
 export * from './Payment';
 export * from './Restaurant';
 export * from './Feedback';
+export * from './Table';
+export * from './SpecialInstruction';
 
 // Re-export commonly used types and enums for convenience
 export {

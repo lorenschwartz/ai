@@ -3,8 +3,13 @@ import { QueryProvider } from './providers/QueryProvider';
 import { CustomerSetup } from './components/CustomerSetup';
 import { ChatInterface } from './components/ChatInterface';
 import { MenuDisplay } from './components/menu/MenuDisplay';
+import { ConfigurationStudio } from './components/config';
+import { Settings } from 'lucide-react';
+
+type AppMode = 'customer' | 'config';
 
 const AppContent: React.FC = () => {
+  const [mode, setMode] = useState<AppMode>('customer');
   const [customerId, setCustomerId] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
 
@@ -21,6 +26,24 @@ const AppContent: React.FC = () => {
     setConversationId(null);
   };
 
+  // Configuration Studio mode
+  if (mode === 'config') {
+    return (
+      <div>
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={() => setMode('customer')}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-lg"
+          >
+            ← Back to Customer View
+          </button>
+        </div>
+        <ConfigurationStudio />
+      </div>
+    );
+  }
+
+  // Customer-facing mode
   return (
     <div className='min-h-screen bg-gray-50'>
       <header className='bg-white border-b border-gray-200 shadow-sm'>
@@ -32,14 +55,24 @@ const AppContent: React.FC = () => {
                 Your AI-Powered Restaurant Assistant
               </p>
             </div>
-            {customerId && (
+            <div className="flex items-center gap-3">
+              {customerId && (
+                <button
+                  onClick={handleReset}
+                  className='px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300'
+                >
+                  New Session
+                </button>
+              )}
               <button
-                onClick={handleReset}
-                className='px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300'
+                onClick={() => setMode('config')}
+                className='flex items-center gap-2 px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200'
+                title="Configuration Studio"
               >
-                New Session
+                <Settings className="h-4 w-4" />
+                Configure
               </button>
-            )}
+            </div>
           </div>
         </div>
       </header>
